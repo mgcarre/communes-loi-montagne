@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        .map {
+            height: 800px;
+            width: 100%;
+        }
+    </style>
+    <title>Map example</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+</head>
+
+<body>
+    <h2>Communes de la loi Montagne du COG 2020</h2>
+    <div id="map" class="map"></div>
+    <script>
+        const map = L.map('map').setView([46.70973, 1.94091], 6);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        fetch('https://www.data.gouv.fr/fr/datasets/r/35d1056f-c74f-4e25-8246-7b9a0e759927').then(rep => rep.json()).then(res => L.geoJSON(res).bindPopup(function (layer) {
+            return `${layer.feature.properties.nom_com} (${layer.feature.properties.reglement})`
+        }).addTo(map))
+    </script>
+</body>
+
+</html>
